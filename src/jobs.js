@@ -1,14 +1,14 @@
-export async function findJobs() {
+export async function findJobs(urlParams) {
     const today = new Date();
-    const minPublishedDate = today.setMonth(today.getMonth() - 3);
-    let offset = 0;
+    const minPublishedDate = today.setMonth(today.getMonth() - 1);
     const jobs = [];
+    let offset = 0;
 
     while (1) {
         const promises = [
-            fetchJobs(offset),
-            fetchJobs(offset + 10),
-            fetchJobs(offset + 20),
+            fetchJobs(urlParams, offset),
+            fetchJobs(urlParams, offset + 10),
+            fetchJobs(urlParams, offset + 20),
         ];
 
         const resposes = await Promise.all(promises);
@@ -25,11 +25,12 @@ export async function findJobs() {
         jobs.push(...filteredData);
         offset += results.length;
     }
-    return jobs;
+    return jobs.reverse();
 }
 
-async function fetchJobs(offset) {
-    const url = `https://portal.api.gupy.io/api/v1/jobs?jobName=desenvolvedor%20S%C3%AAnior&limit=10&offset=${offset}&workplaceType=remote`
+async function fetchJobs(urlParams, offset) {
+    const url = `https://portal.api.gupy.io/api/v1/jobs?jobName=${urlParams}&offset=${offset}`
+    console.log(url);
     const response = await fetch(url, {
         "headers": {
             "accept": "application/json, text/plain, */*",

@@ -11,5 +11,8 @@
   },
   "name": "gupy-job-info",
   "private": true,
-  "version": "0.0.0"
+  "version": "0.0.0",
+  "dependencies": {
+    "@yaireo/tagify": "^4.27.0"
+  }
 }

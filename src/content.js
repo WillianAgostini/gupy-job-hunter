@@ -3,6 +3,15 @@ import { createJobCard, removeExistingCards } from './cards';
 import { createPopup } from './popup';
 
 const jobsToShow = [];
+let countJobs = 0;
+
+const { keywordComponent } = createPopup(findButton)
+
+
+const resultElement = document.querySelector('[data-testid="result-total-text"]');
+
+
+
 
 const companiesSection = document.querySelector('section[aria-label="Found companies"]');
 
@@ -29,8 +38,6 @@ if (companiesSection) {
     filterButton.style.cursor = "pointer";
 
     filterButton.addEventListener("click", function () {
-      console.log('click')
-      createPopup(findButton)
       document.getElementById("popup").style.display = "block";
       document.getElementById("overlay").style.display = "block";
     });
@@ -40,26 +47,24 @@ if (companiesSection) {
 }
 
 async function findButton() {
-  
-  // const xxx = document.getElementById("keywords").value;
-  // console.log("Palavras-chave:", xxx);
-
   document.getElementById("popup").style.display = "none";
   document.getElementById("loading").style.display = "block";
   document.getElementById("overlay").style.display = "block";
 
-  const jobs = await findJobs();
-  const keywords = ['Node.js', 'node js'];
-  const currentUrl = window.location.href;
+  const keywords = keywordComponent.value?.map(x => x.value);
+  const urlParams = extractTerm(window.location.href);
+
+  const jobs = await findJobs(urlParams);
   const jobsToShow = await findKeywordsInJobs(jobs, keywords, 10);
   removeExistingCards();
+  countJobs = 0;
 
   const jobToShowInterval = setInterval(() => {
     if (!jobsToShow.length) {
       clearInterval(jobToShowInterval)
     }
-
-  addJobCards([jobsToShow.pop()]);
+    updateResultElement(++countJobs);
+    addJobCards([jobsToShow.pop()]);
   }, 100);
 
   document.getElementById("loading").style.display = "none";
@@ -73,4 +78,29 @@ function addJobCards(jobs) {
     const jobCard = createJobCard(job);
     jobListComponent.appendChild(jobCard);
   });
+}
+
+function extractTerm(url) {
+  const termIndex = url.indexOf('term=');
+  if (termIndex !== -1) {
+    const termPart = url.substring(termIndex + 5);
+    return termPart;
+  }
+  return '';
+}
+
+function updateResultElement(countJobs) {
+  if (!resultElement) return;
+
+  const vacanciesElement = resultElement.querySelectorAll('strong')[1];
+
+  if (vacanciesElement) {
+    vacanciesElement.textContent = `${countJobs} vacancies`;
+  }
+
+  if (!resultElement.textContent.includes('found with Gupy Job Find')) {
+    const additionalText = document.createElement('span');
+    additionalText.textContent = ' with Gupy Job Find';
+    resultElement.appendChild(additionalText);
+  }
 }
