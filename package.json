@@ -1,13 +1,15 @@
 {
   "devDependencies": {
     "extension": "latest",
+    "prettier": "^3.3.2",
     "watch": "^1.0.2"
   },
   "scripts": {
     "dev": "extension dev",
     "start": "extension start",
     "build": "extension build",
-    "watch": "watch 'npm run build' ./src"
+    "check": "prettier src/* --check",
+    "format": "prettier src/* --write"
   },
   "name": "gupy-job-info",
   "private": true,

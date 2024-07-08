@@ -1,8 +1,8 @@
-import { formatDate } from './date';
+import { formatDate } from "./date";
 
 export function createJobCard(job) {
-    const jobCard = document.createElement('li');
-    const place = job.state ? `${job.city} - ${job.state}` : 'Not informed';
+    const jobCard = document.createElement("li");
+    const place = job.state ? `${job.city} - ${job.state}` : "Not informed";
     jobCard.innerHTML = `
   <div class="sc-4d881605-0 kokxPe">
       <div class="sc-9de900ec-0 khWrGf">
@@ -70,7 +70,9 @@ export function createJobCard(job) {
                                   </path>
                               </svg></div><span aria-hidden="true" class="sc-23336bc7-1 cezNaf">${job.type}</span>
                       </div>
-                      ${job.disabilities ? `
+                      ${
+                          job.disabilities
+                              ? `
                         <div aria-label="This job is also for People with Disabilities." id="" role="group"
                           class="sc-23336bc7-2 hCmVmU">
                           <div class="sc-dkzDqf eNgrhv"><svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24"
@@ -81,7 +83,9 @@ export function createJobCard(job) {
                                   </path>
                               </svg></div><span aria-hidden="true" class="sc-23336bc7-1 cezNaf">Also for PwD</span>
                         </div>     
-                        `: ''}
+                        `
+                              : ""
+                      }
                   </div>
               </div>
               <div class="sc-d9e69618-1 fPWTrT">
@@ -96,6 +100,6 @@ export function createJobCard(job) {
 }
 
 export function removeExistingCards() {
-    const jobListComponent = document.querySelector('.sc-a01de6b-0');
-    jobListComponent.innerHTML = '';
+    const jobListComponent = document.querySelector(".sc-a01de6b-0");
+    jobListComponent.innerHTML = "";
 }
