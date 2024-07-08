@@ -1,20 +1,6 @@
 import { findJobs, findKeywordsInJobs } from './jobs';
 import { createJobCard, removeExistingCards } from './cards';
-
-document.body.innerHTML += `
-<!-- Popup Structure -->
-<div id="popup" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); width:300px; padding:20px; background-color:white; box-shadow:0 0 10px rgba(0,0,0,0.1); z-index:1000;">
-    <h3>Enter Keywords</h3>
-    <textarea id="keywords" rows="5" style="width:100%;"></textarea>
-    <button id="findButton" style="margin-top:10px; padding:10px; background-color:#007bff; color:white; border:none; cursor:pointer;">Find</button>
-</div>
-<!-- Overlay to darken the background -->
-<div id="overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.5); z-index:999;"></div>
-<!-- Loading Indicator -->
-<div id="loading" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); padding:20px; background-color:white; box-shadow:0 0 10px rgba(0,0,0,0.1); z-index:1001;">
-    Loading...
-</div>
-`
+import { createPopup } from './popup';
 
 const jobsToShow = [];
 
@@ -43,6 +29,8 @@ if (companiesSection) {
     filterButton.style.cursor = "pointer";
 
     filterButton.addEventListener("click", function () {
+      console.log('click')
+      createPopup(findButton)
       document.getElementById("popup").style.display = "block";
       document.getElementById("overlay").style.display = "block";
     });
@@ -51,7 +39,8 @@ if (companiesSection) {
   }
 }
 
-document.getElementById("findButton").addEventListener("click", async function () {
+async function findButton() {
+  
   // const xxx = document.getElementById("keywords").value;
   // console.log("Palavras-chave:", xxx);
 
@@ -61,11 +50,11 @@ document.getElementById("findButton").addEventListener("click", async function (
 
   const jobs = await findJobs();
   const keywords = ['Node.js', 'node js'];
+  const currentUrl = window.location.href;
   const jobsToShow = await findKeywordsInJobs(jobs, keywords, 10);
   removeExistingCards();
 
   const jobToShowInterval = setInterval(() => {
-    console.log('jobsToShow', jobsToShow.length)
     if (!jobsToShow.length) {
       clearInterval(jobToShowInterval)
     }
@@ -75,14 +64,7 @@ document.getElementById("findButton").addEventListener("click", async function (
 
   document.getElementById("loading").style.display = "none";
   document.getElementById("overlay").style.display = "none";
-
-});
-
-document.getElementById("overlay").addEventListener("click", function () {
-  document.getElementById("popup").style.display = "none";
-  document.getElementById("overlay").style.display = "none";
-  document.getElementById("loading").style.display = "none";
-});
+};
 
 
 function addJobCards(jobs) {
@@ -92,4 +74,3 @@ function addJobCards(jobs) {
     jobListComponent.appendChild(jobCard);
   });
 }
-
