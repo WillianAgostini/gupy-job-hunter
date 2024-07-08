@@ -1,0 +1,15 @@
+{
+  "devDependencies": {
+    "extension": "latest",
+    "watch": "^1.0.2"
+  },
+  "scripts": {
+    "dev": "extension dev",
+    "start": "extension start",
+    "build": "extension build",
+    "watch": "watch 'npm run build' ./src"
+  },
+  "name": "gupy-job-info",
+  "private": true,
+  "version": "0.0.0"
+}
