@@ -1,20 +1,20 @@
 {
-  "devDependencies": {
-    "extension": "latest",
-    "prettier": "^3.3.2",
-    "watch": "^1.0.2"
-  },
-  "scripts": {
-    "dev": "extension dev",
-    "start": "extension start",
-    "build": "extension build",
-    "check": "prettier src/* --check",
-    "format": "prettier src/* --write"
-  },
-  "name": "jupy-job-hunter",
-  "description": "A powerful Browser extension designed to enhance your job search experience on the Gupy platform. Gupy Job Finder allows you to filter and find job vacancies based on specific keywords, providing a seamless and efficient way to discover new career opportunities.",
-  "version": "0.0.1",
-  "dependencies": {
-    "@yaireo/tagify": "^4.27.0"
-  }
+	"devDependencies": {
+		"extension": "latest",
+		"prettier": "^3.3.2",
+		"watch": "^1.0.2"
+	},
+	"scripts": {
+		"dev": "extension dev",
+		"start": "extension start",
+		"build": "extension build",
+		"check": "prettier src/* --check",
+		"format": "prettier src/* --write"
+	},
+	"name": "gupy-job-hunter",
+	"description": "A powerful Browser extension designed to enhance your job search experience on the Gupy platform. Gupy Job Finder allows you to filter and find job vacancies based on specific keywords, providing a seamless and efficient way to discover new career opportunities.",
+	"version": "0.0.1",
+	"dependencies": {
+		"@yaireo/tagify": "^4.27.0"
+	}
 }

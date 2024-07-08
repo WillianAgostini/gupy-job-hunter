@@ -25,7 +25,7 @@ if (companiesSection) {
         containerDiv.appendChild(companiesTitle);
 
         const filterButton = document.createElement("button");
-        filterButton.textContent = "Buscar com Gupy Job Find";
+        filterButton.textContent = "Gupy Job Finder";
         filterButton.style.padding = "10px";
         filterButton.style.marginLeft = "10px";
         filterButton.style.border = "none";
