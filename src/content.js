@@ -3,26 +3,25 @@ import { createJobCard, removeExistingCards } from "./cards";
 import { createPopup } from "./popup";
 
 const jobsToShow = [];
-let countJobs = 0;
 
 const { keywordComponent } = createPopup(findButton);
 
 const resultElement = document.querySelector('[data-testid="result-total-text"]');
 
-const companiesSection = document.querySelector('section[aria-label="Found companies"]');
+const main = document.getElementById("main-content");
 
-if (companiesSection) {
-    const companiesTitle = companiesSection.querySelector("h2");
+if (main) {
+    const title = main.querySelector("h2") || main.querySelector("h3");
 
-    if (companiesTitle) {
+    if (title) {
         const containerDiv = document.createElement("div");
         containerDiv.style.display = "flex";
         containerDiv.style.alignItems = "center";
         containerDiv.style.justifyContent = "space-between";
         containerDiv.style.marginTop = "10px";
 
-        companiesTitle.parentNode.insertBefore(containerDiv, companiesTitle);
-        containerDiv.appendChild(companiesTitle);
+        title.parentNode.insertBefore(containerDiv, title);
+        containerDiv.appendChild(title);
 
         const filterButton = document.createElement("button");
         filterButton.textContent = "Gupy Job Finder";
@@ -53,7 +52,8 @@ async function findButton() {
     const jobs = await findJobs(urlParams);
     const jobsToShow = await findKeywordsInJobs(jobs, keywords, 10);
     removeExistingCards();
-    countJobs = 0;
+    let countJobs = 0;
+    updateResultElement(countJobs);
 
     const jobToShowInterval = setInterval(() => {
         if (!jobsToShow.length) {
@@ -87,7 +87,7 @@ function extractTerm(url) {
 function updateResultElement(countJobs) {
     if (!resultElement) return;
 
-    const vacanciesElement = resultElement.querySelectorAll("strong")[1];
+    const vacanciesElement = resultElement.querySelectorAll("strong")[1] || resultElement.querySelectorAll("strong")[0];
 
     if (vacanciesElement) {
         vacanciesElement.textContent = `${countJobs} vacancies`;
