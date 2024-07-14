@@ -10,16 +10,13 @@
   "host_permissions": [
     "https://portal.gupy.io/*"
   ],
-  "background": {
-    "service_worker": "service-worker.js"
-  },
   "content_scripts": [
     {
       "matches": [
         "https://portal.gupy.io/*"
       ],
       "js": [
-        "src/content.js",
+        "src/content.ts",
         "libs/tagify.polyfills.min.js"
       ],
       "css": [

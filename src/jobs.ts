@@ -1,4 +1,4 @@
-export async function findJobs(urlParams) {
+export async function findJobs(urlParams: string) {
     const today = new Date();
     const minPublishedDate = today.setMonth(today.getMonth() - 1);
     const jobs = [];
@@ -10,7 +10,7 @@ export async function findJobs(urlParams) {
         const resposes = await Promise.all(promises);
         const results = resposes.flatMap((x) => x.data);
         const filteredData = results.filter((data) => {
-            const publishedDate = new Date(data.publishedDate);
+            const publishedDate = new Date(data.publishedDate).getTime();
             return publishedDate >= minPublishedDate;
         });
 
@@ -24,7 +24,7 @@ export async function findJobs(urlParams) {
     return jobs.reverse();
 }
 
-async function fetchJobs(urlParams, offset) {
+async function fetchJobs(urlParams: string, offset: number) {
     const url = `https://portal.api.gupy.io/api/v1/jobs?jobName=${urlParams}&offset=${offset}`;
     console.log(url);
     const response = await fetch(url, {
@@ -47,17 +47,54 @@ async function fetchJobs(urlParams, offset) {
         credentials: "omit",
     });
 
-    return await response.json();
+    return (await response.json()) as GupyResponse;
 }
 
-export async function findKeywordsInJobs(jobs, keywords) {
-    const hasKeywords = [];
-    jobs.forEach((job) => {
+export async function findKeywordsInJobs(jobs: any[], keywords: any[]) {
+    const hasKeywords: any[] = [];
+    jobs.forEach((job: { description: string }) => {
         const lowerCaseText = job.description.toLowerCase();
-        const containsKeyword = keywords.some((keyword) => lowerCaseText.includes(keyword.toLowerCase()));
+        const containsKeyword = keywords.some((keyword: string) => lowerCaseText.includes(keyword.toLowerCase()));
         if (containsKeyword) {
             hasKeywords.push(job);
         }
     });
     return hasKeywords;
+}
+
+export interface GupyResponse {
+    data: Job[];
+    pagination: Pagination;
+}
+
+export interface Job {
+    id: number;
+    companyId: number;
+    name: string;
+    description: string;
+    careerPageId: number;
+    careerPageName: string;
+    careerPageLogo: string;
+    type: string;
+    publishedDate: string;
+    applicationDeadline?: string;
+    isRemoteWork: boolean;
+    city: string;
+    state: string;
+    country: string;
+    jobUrl: string;
+    badges: Badges;
+    disabilities: boolean;
+    workplaceType: string;
+    careerPageUrl: string;
+}
+
+export interface Badges {
+    friendlyBadge: boolean;
+}
+
+export interface Pagination {
+    offset: number;
+    limit: number;
+    total: number;
 }

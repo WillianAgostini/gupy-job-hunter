@@ -1,6 +1,6 @@
 import Tagify from "@yaireo/tagify";
 
-export function createPopup(onClick) {
+export function createPopup(onClick: { (): Promise<void>; (this: HTMLElement, ev: MouseEvent): any }) {
     const popup = document.createElement("div");
     popup.id = "popup";
     popup.style.display = "none";
@@ -19,7 +19,6 @@ export function createPopup(onClick) {
         <button id="findButton" style="margin-top:10px; padding:10px; background-color:#007bff; color:white; border:none; cursor:pointer;">Find</button>
     `;
 
-    // Cria o overlay
     const overlay = document.createElement("div");
     overlay.id = "overlay";
     overlay.style.display = "none";
@@ -31,7 +30,6 @@ export function createPopup(onClick) {
     overlay.style.backgroundColor = "rgba(0,0,0,0.5)";
     overlay.style.zIndex = "999";
 
-    // Cria o indicador de carregamento
     const loading = document.createElement("div");
     loading.id = "loading";
     loading.style.display = "none";
@@ -45,25 +43,26 @@ export function createPopup(onClick) {
     loading.style.zIndex = "1001";
     loading.textContent = "Loading...";
 
-    // Adiciona os elementos ao body
     document.body.appendChild(popup);
     document.body.appendChild(overlay);
     document.body.appendChild(loading);
 
-    var keywords = document.getElementById("keywords");
-    const keywordComponent = new Tagify(keywords, {
-        id: "keywords",
-    });
+    const keywordComponent = createKeywordComponent();
 
-    // Adiciona o listener ao botão "Find"
-    document.getElementById("findButton").addEventListener("click", onClick);
+    document.getElementById("findButton")?.addEventListener("click", onClick);
 
-    // Adiciona o listener ao overlay para fechar o popup
-    document.getElementById("overlay").addEventListener("click", function () {
-        document.getElementById("popup").style.display = "none";
-        document.getElementById("overlay").style.display = "none";
-        document.getElementById("loading").style.display = "none";
+    document.getElementById("overlay")?.addEventListener("click", function () {
+        document.getElementById("popup")!.style.display = "none";
+        document.getElementById("overlay")!.style.display = "none";
+        document.getElementById("loading")!.style.display = "none";
     });
 
     return { keywordComponent };
+}
+function createKeywordComponent() {
+    const keywords = document.getElementById("keywords") as HTMLInputElement;
+    const keywordComponent = new Tagify(keywords, {
+        id: "keywords",
+    });
+    return keywordComponent;
 }

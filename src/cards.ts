@@ -1,18 +1,18 @@
 import { formatDate } from "./date";
+import { Job } from "./jobs";
 import { hasViewedJob, setViewedJob } from "./storage";
 
-function formatCity(city) {
-    if(!city) return '';
-    const abrevCity = city.substring(0, 10)
+function formatCity(city: string) {
+    if (!city) return "";
+    const abrevCity = city.substring(0, 10);
     if (abrevCity.length < 10) return abrevCity;
     return abrevCity + "...";
 }
 
-export function createJobCard(job) {
+export function createJobCard(job: Job) {
     const jobCard = document.createElement("li");
     const place = job.state ? `${formatCity(job.city)} - ${getBrazilianStateAbbreviation(job.state)}` : "Not informed";
 
-    // Criação do conteúdo do cartão de emprego
     jobCard.innerHTML = `
     <div class="sc-4d881605-0 kokxPe">
         <div class="sc-9de900ec-0 khWrGf">
@@ -71,8 +71,17 @@ export function createJobCard(job) {
                             </div>
                             <span aria-hidden="true" class="sc-23336bc7-1 cezNaf">${typeOfJob(job.type)}</span>
                         </div>
-                        ${job.disabilities
-            ? `
+                        <div aria-label="Linkedin" role="group" class="sc-23336bc7-2 hCmVmU">
+                            <div class="sc-dkzDqf eNgrhv">
+                                <svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true" alt="${job.type}">
+                                    <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.1 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"></path>
+                                </svg>
+                            </div>
+                            <span aria-hidden="true" class="sc-23336bc7-1 cezNaf">${typeOfJob(job.type)}</span>
+                        </div>
+                        ${
+                            job.disabilities
+                                ? `
                             <div aria-label="This job is also for People with Disabilities." id="" role="group" class="sc-23336bc7-2 hCmVmU">
                                 <div class="sc-dkzDqf eNgrhv">
                                     <svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true" alt="Accessibility Icon">
@@ -83,8 +92,8 @@ export function createJobCard(job) {
                                 <span aria-hidden="true" class="sc-23336bc7-1 cezNaf">Also for PwD</span>
                             </div>
                             `
-            : ""
-        }
+                                : ""
+                        }
                     </div>
                 </div>
                 <div class="sc-d9e69618-1 fPWTrT">
@@ -96,11 +105,11 @@ export function createJobCard(job) {
     </div>
     `;
 
-    const publishedOnElement = jobCard.querySelector(".sc-d9e69618-0");
+    const publishedOnElement = jobCard.querySelector(".sc-d9e69618-0") as any;
 
     // Função para adicionar o ícone de visualizado
     const insertViewed = () => {
-        if (!publishedOnElement.querySelector('span[data-viewed="true"]')) {
+        if (!publishedOnElement!.querySelector('span[data-viewed="true"]')) {
             const okIcon = document.createElement("span");
             okIcon.textContent = "✔";
             okIcon.style.color = "green";
@@ -131,60 +140,60 @@ export function createJobCard(job) {
 
 export function removeExistingCards() {
     const jobListComponent = document.querySelector(".sc-a01de6b-0");
-    jobListComponent.innerHTML = "";
+    jobListComponent!.innerHTML = "";
 }
 
-function typeOfJob(type) {
-    const jobTypes = {
-        "vacancy_type_apprentice": 'Apprentice',
-        "vacancy_type_associate": 'Associate',
-        "vacancy_type_talent_pool": 'TalentPool',
-        "vacancy_type_effective": 'Effective',
-        "vacancy_type_internship": 'Internship',
-        "vacancy_type_summer": 'Summer',
-        "vacancy_type_temporary": 'Temporary',
-        "vacancy_type_outsource": 'Outsource',
-        "vacancy_type_trainee": 'Trainee',
-        "vacancy_type_volunteer": 'Volunteer',
-        "vacancy_legal_entity": 'lEntity',
-        "vacancy_type_parter": 'Partner',
-        "vacancy_type_lecturer": 'Lecturer',
-        "vacancy_type_freelancer": 'Freelancer',
-        "vacancy_type_autonomous": 'Autonomous',
+function typeOfJob(type: string | number) {
+    const jobTypes: { [key: string]: string } = {
+        vacancy_type_apprentice: "Apprentice",
+        vacancy_type_associate: "Associate",
+        vacancy_type_talent_pool: "TalentPool",
+        vacancy_type_effective: "Effective",
+        vacancy_type_internship: "Internship",
+        vacancy_type_summer: "Summer",
+        vacancy_type_temporary: "Temporary",
+        vacancy_type_outsource: "Outsource",
+        vacancy_type_trainee: "Trainee",
+        vacancy_type_volunteer: "Volunteer",
+        vacancy_legal_entity: "lEntity",
+        vacancy_type_parter: "Partner",
+        vacancy_type_lecturer: "Lecturer",
+        vacancy_type_freelancer: "Freelancer",
+        vacancy_type_autonomous: "Autonomous",
     };
 
     return jobTypes[type] || type;
 }
 
-function getBrazilianStateAbbreviation(stateName) {
-    const states = {
-        "Acre": "AC",
-        "Alagoas": "AL",
-        "Amapá": "AP",
-        "Amazonas": "AM",
-        "Bahia": "BA",
-        "Ceará": "CE",
+function getBrazilianStateAbbreviation(stateName: string | number) {
+    const states: { [key: string]: string } = {
+        Acre: "AC",
+        Alagoas: "AL",
+        Amapá: "AP",
+        Amazonas: "AM",
+        Bahia: "BA",
+        Ceará: "CE",
         "Distrito Federal": "DF",
         "Espírito Santo": "ES",
-        "Goiás": "GO",
-        "Maranhão": "MA",
+        Goiás: "GO",
+        Maranhão: "MA",
         "Mato Grosso": "MT",
         "Mato Grosso do Sul": "MS",
         "Minas Gerais": "MG",
-        "Pará": "PA",
-        "Paraíba": "PB",
-        "Paraná": "PR",
-        "Pernambuco": "PE",
-        "Piauí": "PI",
+        Pará: "PA",
+        Paraíba: "PB",
+        Paraná: "PR",
+        Pernambuco: "PE",
+        Piauí: "PI",
         "Rio de Janeiro": "RJ",
         "Rio Grande do Norte": "RN",
         "Rio Grande do Sul": "RS",
-        "Rondônia": "RO",
-        "Roraima": "RR",
+        Rondônia: "RO",
+        Roraima: "RR",
         "Santa Catarina": "SC",
         "São Paulo": "SP",
-        "Sergipe": "SE",
-        "Tocantins": "TO"
+        Sergipe: "SE",
+        Tocantins: "TO",
     };
 
     return states[stateName] || stateName;

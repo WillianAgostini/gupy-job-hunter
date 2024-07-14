@@ -1,4 +1,4 @@
-import { findJobs, findKeywordsInJobs } from "./jobs";
+import { Job, findJobs, findKeywordsInJobs } from "./jobs";
 import { createJobCard, removeExistingCards } from "./cards";
 import { createPopup } from "./popup";
 
@@ -20,7 +20,7 @@ if (main) {
         containerDiv.style.justifyContent = "space-between";
         containerDiv.style.marginTop = "10px";
 
-        title.parentNode.insertBefore(containerDiv, title);
+        title.parentNode?.insertBefore(containerDiv, title);
         containerDiv.appendChild(title);
 
         const filterButton = document.createElement("button");
@@ -33,8 +33,8 @@ if (main) {
         filterButton.style.cursor = "pointer";
 
         filterButton.addEventListener("click", function () {
-            document.getElementById("popup").style.display = "block";
-            document.getElementById("overlay").style.display = "block";
+            document.getElementById("popup")!.style.display = "block";
+            document.getElementById("overlay")!.style.display = "block";
         });
 
         containerDiv.appendChild(filterButton);
@@ -42,15 +42,15 @@ if (main) {
 }
 
 async function findButton() {
-    document.getElementById("popup").style.display = "none";
-    document.getElementById("loading").style.display = "block";
-    document.getElementById("overlay").style.display = "block";
+    document.getElementById("popup")!.style.display = "none";
+    document.getElementById("loading")!.style.display = "block";
+    document.getElementById("overlay")!.style.display = "block";
 
     const keywords = keywordComponent.value?.map((x) => x.value);
     const urlParams = extractTerm(window.location.href);
 
     const jobs = await findJobs(urlParams);
-    const jobsToShow = await findKeywordsInJobs(jobs, keywords, 10);
+    const jobsToShow = await findKeywordsInJobs(jobs, keywords);
     removeExistingCards();
     let countJobs = 0;
     updateResultElement(countJobs);
@@ -63,19 +63,19 @@ async function findButton() {
         addJobCards([jobsToShow.pop()]);
     }, 100);
 
-    document.getElementById("loading").style.display = "none";
-    document.getElementById("overlay").style.display = "none";
+    document.getElementById("loading")!.style.display = "none";
+    document.getElementById("overlay")!.style.display = "none";
 }
 
-function addJobCards(jobs) {
+function addJobCards(jobs: any[]) {
     const jobListComponent = document.querySelector(".sc-a01de6b-0");
-    jobs.forEach((job) => {
+    jobs.forEach((job: Job) => {
         const jobCard = createJobCard(job);
-        jobListComponent.appendChild(jobCard);
+        jobListComponent?.appendChild(jobCard);
     });
 }
 
-function extractTerm(url) {
+function extractTerm(url: string) {
     const termIndex = url.indexOf("term=");
     if (termIndex !== -1) {
         const termPart = url.substring(termIndex + 5);
@@ -84,7 +84,7 @@ function extractTerm(url) {
     return "";
 }
 
-function updateResultElement(countJobs) {
+function updateResultElement(countJobs: number) {
     if (!resultElement) return;
 
     const vacanciesElement = resultElement.querySelectorAll("strong")[1] || resultElement.querySelectorAll("strong")[0];
@@ -93,7 +93,7 @@ function updateResultElement(countJobs) {
         vacanciesElement.textContent = `${countJobs} vacancies`;
     }
 
-    if (!resultElement.textContent.includes("found with Gupy Job Find")) {
+    if (!resultElement.textContent!.includes("found with Gupy Job Find")) {
         const additionalText = document.createElement("span");
         additionalText.textContent = " with Gupy Job Find";
         resultElement.appendChild(additionalText);
