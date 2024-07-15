@@ -26,7 +26,6 @@ export async function findJobs(urlParams: string) {
 
 async function fetchJobs(urlParams: string, offset: number) {
     const url = `https://portal.api.gupy.io/api/v1/jobs?jobName=${urlParams}&offset=${offset}`;
-    console.log(url);
     const response = await fetch(url, {
         headers: {
             accept: "application/json, text/plain, */*",
